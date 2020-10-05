@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Pie from 'react-chartjs-2';
 
-export const TotalProdsPerProg = () => {
+export const StockAboveOneyrPerProg = () => {
   const [chartData, setChartData] = useState({});
 
   const chart = () => {
@@ -17,8 +17,6 @@ export const TotalProdsPerProg = () => {
     let vendorSled = [];
     let pcrDescription = [];
 
-    const value = 568;
-
     axios
       .get('https://api-unicef.herokuapp.com/api/v1/zcoinv/list')
       .then((res) => {
@@ -31,28 +29,28 @@ export const TotalProdsPerProg = () => {
           warehouseNumberDescription.push(item.warehouseNumberDescription);
           totalStock.push(item.totalStock);
           currency.push(item.currency);
-          vendorSled.push(parseInt(item.vendorSled));
+          vendorSled.push(item.vendorSled);
           pcrDescription.push(item.pcrDescription);
         }
 
         // console.log('des ', pcrDescription);
         //Get count of items
-        var occurrences = pcrDescription.reduce(function (obj, i) {
+        var occurrences = validToDate.reduce(function (obj, i) {
           obj[i] = (obj[i] || 0) + 1;
           return obj;
         }, {});
 
-        const nutritionCount = occurrences['03 NUTRITION'];
-        const educationCount = occurrences['05 BASIC EDUCATION'];
-        const washCount = occurrences['02 WASH'];
-        const healthCount = occurrences['01 HEALTH'];
+        const yr21 = occurrences['2021'];
+        const yr22 = occurrences['2022'];
+        const yr23 = occurrences['2023'];
+        const yr99 = occurrences['9999'];
 
         setChartData({
-          labels: ['Nutrition', 'Education', 'Wash', 'Health'],
+          labels: ['2021', '2022', '2023', '2024'],
           datasets: [
             {
-              label: 'Total Number of Stocks per Program',
-              data: [nutritionCount, educationCount, washCount, healthCount],
+              label: 'Stocks Above One year per Program',
+              data: [yr21, yr22, yr23, yr99],
               backgroundColor: [
                 'rgba(75, 192, 192, 0.6)',
                 'rgba(255, 0, 0, 0.6)',
@@ -67,6 +65,29 @@ export const TotalProdsPerProg = () => {
       .catch((err) => {
         console.log(err.message);
       });
+
+    // console.log(
+    //   'grant',
+    //   grant,
+    //   'validTodDate',
+    //   validToDate,
+    //   'stock',
+    //   stock,
+    //   'stockValue',
+    //   stockValue,
+    //   'warehouseNum',
+    //   warehouseNumber,
+    //   'warehouseDesc',
+    //   warehouseNumberDescription,
+    //   'totalStock',
+    //   totalStock,
+    //   'currency',
+    //   currency,
+    //   'vendorSled',
+    //   vendorSled,
+    //   'pcrDesc',
+    //   pcrDescription
+    // );
   };
 
   useEffect(() => {
@@ -84,7 +105,7 @@ export const TotalProdsPerProg = () => {
             },
             title: {
               position: 'top',
-              text: 'Total Number of Products Per Program',
+              text: 'Stocks Above One year Per Program',
               display: true,
             },
             plugins: {
@@ -105,4 +126,4 @@ export const TotalProdsPerProg = () => {
   );
 };
 
-export default TotalProdsPerProg;
+export default StockAboveOneyrPerProg;
