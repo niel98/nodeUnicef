@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Pie from 'react-chartjs-2';
 
-export const GrantsExLessThreeMonths = () => {
+export const ExpiredSledLessOneyr = () => {
   const [chartData, setChartData] = useState({});
 
   const chart = () => {
-    let grant21Nutri = [];
-    let grant20Wash = [];
+    let sled21Nutri = [];
+    let sled20Wash = [];
+    let sled21Edu = [];
 
     const fetchData = () => {
       const urls = [
         'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?validToDate=2021-01&pcrDescription=03 NUTRITION',
         'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?validToDate=2020-12&pcrDescription=02 WASH',
+        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?validToDate=2021-03&pcrDescription=05 BASIC EDUCATION',
       ];
 
       const allRequests = urls.map((url) => axios.get(url).then((res) => res));
@@ -22,29 +24,35 @@ export const GrantsExLessThreeMonths = () => {
     fetchData()
       .then((arrRes) => {
         for (const item of arrRes[0].data.data) {
-          grant21Nutri.push(item.grant);
+          sled21Nutri.push(item.vendorSledBbd);
         }
         for (const item of arrRes[1].data.data) {
-          grant20Wash.push(item.grant);
+          sled20Wash.push(item.vendorSledBbd);
+        }
+        for (const item of arrRes[2].data.data) {
+          sled21Edu.push(item.vendorSledBbd);
         }
 
-        const grant21tot = grant21Nutri.length;
-        const grant20tot = grant20Wash.length;
+        console.log('total nutri sled', sled21Nutri);
 
-        // var d = new Date();
-        // d.setMonth(d.getMonth() + 6);
-        // console.log('In 3 months: ', d.toLocaleDateString());
+        const sledNutriTot = sled21Nutri.length;
+        const sledWashTot = sled20Wash.length;
+        const sledEduTot = sled21Edu.length;
+
+        var d = new Date();
+        d.setMonth(d.getMonth() + 6);
+        console.log('In six months: ', d.toLocaleDateString());
 
         setChartData({
-          labels: ['Nutrition', 'Wash'],
+          labels: ['Nutrition', 'Wash', 'Education'],
           datasets: [
             {
-              label: 'Expired Grants less than 3 months by Program',
-              data: [grant21tot, grant20tot],
+              label: 'Expired/Sled less than One year by Program',
+              data: [sledNutriTot, sledWashTot, sledEduTot],
               backgroundColor: [
                 'rgba(75, 192, 192, 0.6)',
                 'rgba(255, 0, 0, 0.6)',
-                // 'rgba(0, 255, 0, 0.6)',
+                'rgba(0, 255, 0, 0.6)',
                 // 'rgba(0, 0, 255, 0.6)',
               ],
               borderwidth: 4,
@@ -72,7 +80,7 @@ export const GrantsExLessThreeMonths = () => {
             },
             title: {
               position: 'top',
-              text: 'Expired Grants less than Three months by Program',
+              text: 'Expired Sled less than One year by Program',
               display: true,
             },
             plugins: {
@@ -93,4 +101,4 @@ export const GrantsExLessThreeMonths = () => {
   );
 };
 
-export default GrantsExLessThreeMonths;
+export default ExpiredSledLessOneyr;
