@@ -7,9 +7,14 @@ import GrantsExLessThreeMonths from './component/Chart/GrantsExLessThreeMonths'
 import GrantsExLessSixMonths from './component/Chart/GrantsExLessSixMonths'
 import ExpiredSledLessOneyr from './component/Chart/ExpiredSledLessOneyr'
 
+import OptionType from './component/SurveyChart/OptionType'
+
 const App = () => {
   return (
     <div>
+      {/* <div>
+        <OptionType />
+      </div> */}
       <div>
         <TotalProdsPerProg />
       </div>

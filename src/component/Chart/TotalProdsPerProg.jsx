@@ -35,7 +35,7 @@ export const TotalProdsPerProg = () => {
           pcrDescription.push(item.pcrDescription);
         }
 
-        // console.log('des ', pcrDescription);
+        console.log('des ', pcrDescription);
         //Get count of items
         var occurrences = pcrDescription.reduce(function (obj, i) {
           obj[i] = (obj[i] || 0) + 1;
