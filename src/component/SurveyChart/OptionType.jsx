@@ -8,8 +8,6 @@ export const OptionType = () => {
   const [chartData, setChartData] = useState({});
 
   const chart = () => {
-    //test
-
     // answer texts
     let answerText = [];
 
@@ -52,7 +50,7 @@ export const OptionType = () => {
           backgroundColor: [
             'rgba(75, 192, 192, 0.6)',
             'rgba(255, 0, 0, 0.6)',
-            // 'rgba(0, 255, 0, 0.6)',
+            'rgba(0, 255, 0, 0.6)',
             // 'rgba(0, 0, 255, 0.6)',
           ],
           borderColor: 'rgba(0,0,0,1)',
@@ -71,18 +69,28 @@ export const OptionType = () => {
       <h2>Option type Survey</h2>
       <Bar
         data={chartData}
-        width={100}
-        height={50}
+        width={20}
+        height={5}
         options={{
+          responsive: true,
           title: {
             display: true,
-            text: 'Option type Responses',
+            text: 'Survey Response Chart',
             fontSize: 20,
           },
-          legend: {
-            display: true,
-            position: 'right',
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  min: 0,
+                },
+              },
+            ],
           },
+          // legend: {
+          //   display: true,
+          //   position: 'bottom',
+          // },
           maintainAspectRatio: false,
         }}
       />
@@ -91,6 +99,7 @@ export const OptionType = () => {
         options={{
           responsive: true,
           legend: {
+            display: true,
             position: 'bottom',
           },
           title: {
