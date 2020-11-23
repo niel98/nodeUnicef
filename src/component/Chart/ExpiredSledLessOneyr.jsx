@@ -1,73 +1,112 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import response from './zcoin';
 import Pie from 'react-chartjs-2';
 
 export const ExpiredSledLessOneyr = () => {
   const [chartData, setChartData] = useState({});
 
   const chart = () => {
-    let sled21Nutri = [];
-    let sled20Wash = [];
-    let sled21Edu = [];
+    const res = response;
+    let programs = res.data.map((item) => item.pcrDescription);
+    const progSet = new Set(programs);
+    let array = Array.from(progSet);
 
-    const fetchData = () => {
-      const urls = [
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?validToDate=2021-01&pcrDescription=03 NUTRITION',
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?validToDate=2020-12&pcrDescription=02 WASH',
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?validToDate=2021-03&pcrDescription=05 BASIC EDUCATION',
-      ];
+    let arr0 = [];
+    let arr1 = [];
+    let arr2 = [];
+    let arr3 = [];
+    let arr4 = [];
+    let arr5 = [];
+    let arr6 = [];
 
-      const allRequests = urls.map((url) => axios.get(url).then((res) => res));
-      return Promise.all(allRequests);
-    };
+    /**Evaluate One year from the current date */
+    const today = new Date();
 
-    fetchData()
-      .then((arrRes) => {
-        for (const item of arrRes[0].data.data) {
-          sled21Nutri.push(item.vendorSledBbd);
-        }
-        for (const item of arrRes[1].data.data) {
-          sled20Wash.push(item.vendorSledBbd);
-        }
-        for (const item of arrRes[2].data.data) {
-          sled21Edu.push(item.vendorSledBbd);
-        }
+    function addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
 
-        console.log('total nutri sled', sled21Nutri);
+    let finDay = addDays(today, 365);
+    let year = finDay.getUTCFullYear();
+    let month = finDay.getUTCMonth() + 1;
+    let day = finDay.getUTCDay();
 
-        const sledNutriTot = sled21Nutri.length;
-        const sledWashTot = sled20Wash.length;
-        const sledEduTot = sled21Edu.length;
+    const newDate = year + '-' + month + '-' + day;
 
-        var d = new Date();
-        d.setMonth(d.getMonth() + 6);
-        console.log('In six months: ', d.toLocaleDateString());
+    res.data.forEach((item) => {
+      if (item.validToDate <= newDate && item.pcrDescription === array[0]) {
+        arr0.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.validToDate <= newDate && item.pcrDescription === array[1]) {
+        arr1.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.validToDate <= newDate && item.pcrDescription === array[2]) {
+        arr2.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.validToDate <= newDate && item.pcrDescription === array[3]) {
+        arr3.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.validToDate <= newDate && item.pcrDescription === array[4]) {
+        arr4.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.validToDate <= newDate && item.pcrDescription === array[5]) {
+        arr5.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.validToDate <= newDate && item.pcrDescription === array[6]) {
+        arr6.push(item.stockValue);
+      }
+    });
 
-        setChartData({
-          labels: ['Nutrition', 'Wash', 'Education'],
-          datasets: [
-            {
-              label: 'Expired/Sled less than One year by Program',
-              data: [sledNutriTot, sledWashTot, sledEduTot],
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(255, 0, 0, 0.6)',
-                'rgba(0, 255, 0, 0.6)',
-                // 'rgba(0, 0, 255, 0.6)',
-              ],
-              borderwidth: 4,
-            },
+    arr0 = arr0.reduce((a, b) => a + b, 0);
+    arr1 = arr1.reduce((a, b) => a + b, 0);
+    arr2 = arr2.reduce((a, b) => a + b, 0);
+    arr3 = arr3.reduce((a, b) => a + b, 0);
+    arr4 = arr4.reduce((a, b) => a + b, 0);
+    arr5 = arr5.reduce((a, b) => a + b, 0);
+    arr6 = arr6.reduce((a, b) => a + b, 0);
+
+    let finVals = [arr0, arr1, arr2, arr3, arr4, arr5, arr6];
+
+    setChartData({
+      labels: array,
+      datasets: [
+        {
+          label: 'Expired/Sled less than One year by Program',
+          data: finVals,
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 0, 0, 0.6)',
+            'rgba(0, 255, 0, 0.6)',
+            'rgba(0, 0, 255, 0.6)',
+            'rgba(255, 255, 0, 0.6)',
+            'rgba(255, 51, 204, 0.6)',
+            'rgba(153, 204, 255, 0.6)',
           ],
-        });
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+          borderwidth: 4,
+        },
+      ],
+    });
   };
 
   useEffect(() => {
     chart();
   }, []);
+
   return (
     <div>
       <div>
@@ -100,5 +139,4 @@ export const ExpiredSledLessOneyr = () => {
     </div>
   );
 };
-
 export default ExpiredSledLessOneyr;

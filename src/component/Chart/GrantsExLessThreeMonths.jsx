@@ -8,41 +8,98 @@ export const GrantsExLessThreeMonths = () => {
 
   const chart = () => {
     const res = response;
-    let grants = res.data.map((item) => item.grant);
-    const grantSet = new Set(grants);
-    let grArray = Array.from(grantSet);
-    console.log('Grants Array: ', grArray);
+    let programs = res.data.map((item) => item.pcrDescription);
+    const progSet = new Set(programs);
+    let array = Array.from(progSet);
 
-    var occurrences = grants.reduce(function (obj, i) {
-      obj[i] = (obj[i] || 0) + 1;
-      return obj;
-    }, {});
-    console.log('Occurences:', occurrences);
+    let arr0 = [];
+    let arr1 = [];
+    let arr2 = [];
+    let arr3 = [];
+    let arr4 = [];
+    let arr5 = [];
+    let arr6 = [];
 
-    let allOcurrence = Object.keys(occurrences);
-    let countsArray = [];
-    console.log('Mystery array: ', countsArray);
+    /**Evaluate three months from the current date */
+    const today = new Date();
 
-    allOcurrence.forEach((element) => {
-      var numTimes = occurrences[element];
-      countsArray.push(numTimes);
+    function addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+
+    let finDay = addDays(today, 90);
+    let year = finDay.getUTCFullYear();
+    let month = finDay.getUTCMonth() + 1;
+    let day = finDay.getUTCDay();
+
+    const newDate = year + '-' + month + '-' + day;
+
+    res.data.forEach((item) => {
+      if (item.grDate <= newDate && item.pcrDescription === array[0]) {
+        arr0.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.grDate <= newDate && item.pcrDescription === array[1]) {
+        arr1.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.grDate <= newDate && item.pcrDescription === array[2]) {
+        arr2.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.grDate <= newDate && item.pcrDescription === array[3]) {
+        arr3.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.grDate <= newDate && item.pcrDescription === array[4]) {
+        arr4.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.grDate <= newDate && item.pcrDescription === array[5]) {
+        arr5.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.grDate <= newDate && item.pcrDescription === array[6]) {
+        arr6.push(item.stockValue);
+      }
     });
 
+    arr0 = arr0.reduce((a, b) => a + b, 0);
+    arr1 = arr1.reduce((a, b) => a + b, 0);
+    arr2 = arr2.reduce((a, b) => a + b, 0);
+    arr3 = arr3.reduce((a, b) => a + b, 0);
+    arr4 = arr4.reduce((a, b) => a + b, 0);
+    arr5 = arr5.reduce((a, b) => a + b, 0);
+    arr6 = arr6.reduce((a, b) => a + b, 0);
+
+    let finVals = [arr0, arr1, arr2, arr3, arr4, arr5, arr6];
+
     setChartData({
-      // labels: ['Nutrition', 'Wash'],
-      // datasets: [
-      //   {
-      //     label: 'Expired Grants less than 3 months by Program',
-      //     data: [grant21tot, grant20tot],
-      //     backgroundColor: [
-      //       'rgba(75, 192, 192, 0.6)',
-      //       'rgba(255, 0, 0, 0.6)',
-      //       // 'rgba(0, 255, 0, 0.6)',
-      //       // 'rgba(0, 0, 255, 0.6)',
-      //     ],
-      //     borderwidth: 4,
-      //   },
-      // ],
+      labels: array,
+      datasets: [
+        {
+          label: 'Expired Grants less than 3 months by Program',
+          data: finVals,
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 0, 0, 0.6)',
+            'rgba(0, 255, 0, 0.6)',
+            'rgba(0, 0, 255, 0.6)',
+            'rgba(255, 255, 0, 0.6)',
+            'rgba(255, 51, 204, 0.6)',
+            'rgba(153, 204, 255, 0.6)',
+          ],
+          borderwidth: 4,
+        },
+      ],
     });
   };
 

@@ -6,6 +6,7 @@ import StockPerWarehouse from './component/Chart/StocksPerWarehouse'
 import GrantsExLessThreeMonths from './component/Chart/GrantsExLessThreeMonths'
 import GrantsExLessSixMonths from './component/Chart/GrantsExLessSixMonths'
 import ExpiredSledLessOneyr from './component/Chart/ExpiredSledLessOneyr'
+import ExpireSledLessSixMonths, { ExpiredSledLessSixMonths } from './component/Chart/ExpiredSledLessSixMonths'
 
 import OptionType from './component/SurveyChart/OptionType'
 
@@ -27,12 +28,15 @@ const App = () => {
       <div>
         <GrantsExLessThreeMonths />
       </div>
-      {/* <div>
+      <div>
         <GrantsExLessSixMonths />
-      </div> */}
-      {/* <div>
+      </div>
+      <div>
         <ExpiredSledLessOneyr />
-      </div> */}
+      </div>
+      <div>
+        <ExpiredSledLessSixMonths />
+      </div>
     </div>
   )
 }

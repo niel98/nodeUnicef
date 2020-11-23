@@ -3,62 +3,75 @@ import axios from 'axios';
 import response from './zcoin';
 import Pie from 'react-chartjs-2';
 
-export const StockPerWarehouse = () => {
+export const ExpiredSledLessSixMonths = () => {
   const [chartData, setChartData] = useState({});
 
   const chart = () => {
     const res = response;
-    let wareHouse = res.data.map((item) => item.warehouseNumberDescription);
-    let disWhouse = new Set(wareHouse);
-    let arrWhouse = Array.from(disWhouse);
+    let programs = res.data.map((item) => item.pcrDescription);
+    const progSet = new Set(programs);
+    let array = Array.from(progSet);
+    console.log('progs array: ', array);
 
     let arr0 = [];
+    console.log('Array one: ', arr0);
     let arr1 = [];
     let arr2 = [];
     let arr3 = [];
     let arr4 = [];
     let arr5 = [];
     let arr6 = [];
-    let arr7 = [];
+
+    /**Evaluate six months from the current date */
+    const today = new Date();
+
+    function addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+
+    let finDay = addDays(today, 180);
+    let year = finDay.getUTCFullYear();
+    let month = finDay.getUTCMonth() + 1;
+    let day = finDay.getUTCDay();
+
+    const newDate = year + '-' + month + '-' + day;
+    console.log('Six months from now: ', newDate);
 
     res.data.forEach((item) => {
-      if (item.warehouseNumberDescription === arrWhouse[0]) {
+      if (item.validToDate <= newDate && item.pcrDescription === array[0]) {
         arr0.push(item.stockValue);
       }
     });
     res.data.forEach((item) => {
-      if (item.warehouseNumberDescription === arrWhouse[1]) {
+      if (item.validToDate <= newDate && item.pcrDescription === array[1]) {
         arr1.push(item.stockValue);
       }
     });
     res.data.forEach((item) => {
-      if (item.warehouseNumberDescription === arrWhouse[2]) {
+      if (item.validToDate <= newDate && item.pcrDescription === array[2]) {
         arr2.push(item.stockValue);
       }
     });
     res.data.forEach((item) => {
-      if (item.warehouseNumberDescription === arrWhouse[3]) {
+      if (item.validToDate <= newDate && item.pcrDescription === array[3]) {
         arr3.push(item.stockValue);
       }
     });
     res.data.forEach((item) => {
-      if (item.warehouseNumberDescription === arrWhouse[4]) {
+      if (item.validToDate <= newDate && item.pcrDescription === array[4]) {
         arr4.push(item.stockValue);
       }
     });
     res.data.forEach((item) => {
-      if (item.warehouseNumberDescription === arrWhouse[5]) {
+      if (item.validToDate <= newDate && item.pcrDescription === array[5]) {
         arr5.push(item.stockValue);
       }
     });
     res.data.forEach((item) => {
-      if (item.warehouseNumberDescription === arrWhouse[6]) {
+      if (item.validToDate <= newDate && item.pcrDescription === array[6]) {
         arr6.push(item.stockValue);
-      }
-    });
-    res.data.forEach((item) => {
-      if (item.warehouseNumberDescription === arrWhouse[7]) {
-        arr7.push(item.stockValue);
       }
     });
 
@@ -69,16 +82,16 @@ export const StockPerWarehouse = () => {
     arr4 = arr4.reduce((a, b) => a + b, 0);
     arr5 = arr5.reduce((a, b) => a + b, 0);
     arr6 = arr6.reduce((a, b) => a + b, 0);
-    arr7 = arr7.reduce((a, b) => a + b, 0);
 
-    let finValArr = [arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7];
+    let finVals = [arr0, arr1, arr2, arr3, arr4, arr5, arr6];
+    console.log('Final vals: ', finVals);
 
     setChartData({
-      labels: arrWhouse,
+      labels: array,
       datasets: [
         {
-          label: 'Total Number of Stocks per Program',
-          data: finValArr,
+          label: 'Expired Sled less than Six months by Program',
+          data: finVals,
           backgroundColor: [
             'rgba(75, 192, 192, 0.6)',
             'rgba(255, 0, 0, 0.6)',
@@ -87,7 +100,6 @@ export const StockPerWarehouse = () => {
             'rgba(255, 255, 0, 0.6)',
             'rgba(255, 51, 204, 0.6)',
             'rgba(153, 204, 255, 0.6)',
-            'rgba(102, 51, 0, 0.6)',
           ],
           borderwidth: 4,
         },
@@ -111,7 +123,7 @@ export const StockPerWarehouse = () => {
             },
             title: {
               position: 'top',
-              text: 'Stock Per Warehouse',
+              text: 'Expired Sled less than Six months by Program',
               display: true,
             },
             plugins: {
@@ -131,5 +143,4 @@ export const StockPerWarehouse = () => {
     </div>
   );
 };
-
-export default StockPerWarehouse;
+export default ExpiredSledLessSixMonths;
