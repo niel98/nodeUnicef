@@ -12,9 +12,9 @@ import OptionType from './component/SurveyChart/OptionType'
 const App = () => {
   return (
     <div>
-      <div>
+      {/* <div>
         <OptionType />
-      </div>
+      </div> */}
       <div>
         <TotalProdsPerProg />
       </div>
@@ -27,12 +27,12 @@ const App = () => {
       <div>
         <GrantsExLessThreeMonths />
       </div>
-      <div>
+      {/* <div>
         <GrantsExLessSixMonths />
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <ExpiredSledLessOneyr />
-      </div>
+      </div> */}
     </div>
   )
 }

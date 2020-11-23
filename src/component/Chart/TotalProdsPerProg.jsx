@@ -1,77 +1,118 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import response from './zcoin';
+import 'chart.piecelabel.js';
 import Pie from 'react-chartjs-2';
 
 export const TotalProdsPerProg = () => {
   const [chartData, setChartData] = useState({});
 
   const chart = () => {
-    let grant = [];
-    let validToDate = [];
-    let stock = [];
-    let stockValue = [];
-    let warehouseNumber = [];
-    let warehouseNumberDescription = [];
-    let totalStock = [];
-    let currency = [];
-    let vendorSled = [];
-    let pcrDescription = [];
+    const res = response;
+    let programs = res.data.map((item) => item.pcrDescription);
+    const progSet = new Set(programs);
+    let array = Array.from(progSet);
 
-    const value = 568;
+    let arr0 = [];
+    let arr1 = [];
+    let arr2 = [];
+    let arr3 = [];
+    let arr4 = [];
+    let arr5 = [];
+    let arr6 = [];
 
-    axios
-      .get('https://api-unicef.herokuapp.com/api/v1/zcoinv/list')
-      .then((res) => {
-        for (const item of res.data.data) {
-          grant.push(item.grant);
-          validToDate.push(parseInt(item.validToDate));
-          stock.push(item.stock);
-          stockValue.push(item.stockValue);
-          warehouseNumber.push(item.warehouseNumber);
-          warehouseNumberDescription.push(item.warehouseNumberDescription);
-          totalStock.push(item.totalStock);
-          currency.push(item.currency);
-          vendorSled.push(parseInt(item.vendorSled));
-          pcrDescription.push(item.pcrDescription);
-        }
+    res.data.forEach((item) => {
+      if (item.pcrDescription === array[0]) {
+        arr0.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.pcrDescription === array[1]) {
+        arr1.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.pcrDescription === array[2]) {
+        arr2.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.pcrDescription === array[3]) {
+        arr3.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.pcrDescription === array[4]) {
+        arr4.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.pcrDescription === array[5]) {
+        arr5.push(item.stockValue);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.pcrDescription === array[6]) {
+        arr6.push(item.stockValue);
+      }
+    });
 
-        console.log('des ', pcrDescription);
-        //Get count of items
-        var occurrences = pcrDescription.reduce(function (obj, i) {
-          obj[i] = (obj[i] || 0) + 1;
-          return obj;
-        }, {});
+    arr0 = arr0.reduce((a, b) => a + b, 0);
+    arr1 = arr1.reduce((a, b) => a + b, 0);
+    arr2 = arr2.reduce((a, b) => a + b, 0);
+    arr3 = arr3.reduce((a, b) => a + b, 0);
+    arr4 = arr4.reduce((a, b) => a + b, 0);
+    arr5 = arr5.reduce((a, b) => a + b, 0);
+    arr6 = arr6.reduce((a, b) => a + b, 0);
 
-        const nutritionCount = occurrences['03 NUTRITION'];
-        const educationCount = occurrences['05 BASIC EDUCATION'];
-        const washCount = occurrences['02 WASH'];
-        const healthCount = occurrences['01 HEALTH'];
+    let finValArr = [arr0, arr1, arr2, arr3, arr4, arr5, arr6];
 
-        setChartData({
-          labels: ['Nutrition', 'Education', 'Wash', 'Health'],
-          datasets: [
-            {
-              label: 'Total Number of Stocks per Program',
-              data: [nutritionCount, educationCount, washCount, healthCount],
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(255, 0, 0, 0.6)',
-                'rgba(0, 255, 0, 0.6)',
-                'rgba(0, 0, 255, 0.6)',
-              ],
-              borderwidth: 4,
-            },
+    // const obj = () => {
+    //   res.data.forEach((item) => {
+    //     let program = [];
+    //     program.push(item.pcrDescription);
+
+    //     let value = [];
+    //     value.push(item.stockValue);
+
+    //     program.forEach((key, i) => (valuesObj[key] = value[i]));
+    //   });
+    // };
+
+    // obj();
+
+    // /**Get the number of occurences for each different answer */
+    // var progOccur = programs.reduce(function (obj, i) {
+    //   obj[i] = (obj[i] || 0) + 1;
+    //   return obj;
+    // }, {});
+    // console.log('Prog Occurences: ', progOccur);
+
+    setChartData({
+      labels: array,
+      datasets: [
+        {
+          label: 'Total Number of Stocks per Program',
+          data: finValArr,
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 0, 0, 0.6)',
+            'rgba(0, 255, 0, 0.6)',
+            'rgba(0, 0, 255, 0.6)',
+            'rgba(255, 255, 0, 0.6)',
+            'rgba(255, 51, 204, 0.6)',
+            'rgba(153, 204, 255, 0.6)',
           ],
-        });
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+          borderwidth: 4,
+        },
+      ],
+    });
   };
 
   useEffect(() => {
     chart();
   }, []);
+
   return (
     <div>
       <div>
@@ -98,11 +139,13 @@ export const TotalProdsPerProg = () => {
                 borderRadius: 25,
               },
             },
+            pieceLabel: {
+              render: 'value',
+            },
           }}
         />
       </div>
     </div>
   );
 };
-
 export default TotalProdsPerProg;

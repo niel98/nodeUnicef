@@ -1,60 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import response from './zcoin';
 import Pie from 'react-chartjs-2';
 
 export const GrantsExLessThreeMonths = () => {
   const [chartData, setChartData] = useState({});
 
   const chart = () => {
-    let grant21Nutri = [];
-    let grant20Wash = [];
+    const res = response;
+    let grants = res.data.map((item) => item.grant);
+    const grantSet = new Set(grants);
+    let grArray = Array.from(grantSet);
+    console.log('Grants Array: ', grArray);
 
-    const fetchData = () => {
-      const urls = [
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?validToDate=2021-01&pcrDescription=03 NUTRITION',
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?validToDate=2020-12&pcrDescription=02 WASH',
-      ];
+    var occurrences = grants.reduce(function (obj, i) {
+      obj[i] = (obj[i] || 0) + 1;
+      return obj;
+    }, {});
+    console.log('Occurences:', occurrences);
 
-      const allRequests = urls.map((url) => axios.get(url).then((res) => res));
-      return Promise.all(allRequests);
-    };
+    let allOcurrence = Object.keys(occurrences);
+    let countsArray = [];
+    console.log('Mystery array: ', countsArray);
 
-    fetchData()
-      .then((arrRes) => {
-        for (const item of arrRes[0].data.data) {
-          grant21Nutri.push(item.grant);
-        }
-        for (const item of arrRes[1].data.data) {
-          grant20Wash.push(item.grant);
-        }
+    allOcurrence.forEach((element) => {
+      var numTimes = occurrences[element];
+      countsArray.push(numTimes);
+    });
 
-        const grant21tot = grant21Nutri.length;
-        const grant20tot = grant20Wash.length;
-
-        // var d = new Date();
-        // d.setMonth(d.getMonth() + 6);
-        // console.log('In 3 months: ', d.toLocaleDateString());
-
-        setChartData({
-          labels: ['Nutrition', 'Wash'],
-          datasets: [
-            {
-              label: 'Expired Grants less than 3 months by Program',
-              data: [grant21tot, grant20tot],
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(255, 0, 0, 0.6)',
-                // 'rgba(0, 255, 0, 0.6)',
-                // 'rgba(0, 0, 255, 0.6)',
-              ],
-              borderwidth: 4,
-            },
-          ],
-        });
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    setChartData({
+      // labels: ['Nutrition', 'Wash'],
+      // datasets: [
+      //   {
+      //     label: 'Expired Grants less than 3 months by Program',
+      //     data: [grant21tot, grant20tot],
+      //     backgroundColor: [
+      //       'rgba(75, 192, 192, 0.6)',
+      //       'rgba(255, 0, 0, 0.6)',
+      //       // 'rgba(0, 255, 0, 0.6)',
+      //       // 'rgba(0, 0, 255, 0.6)',
+      //     ],
+      //     borderwidth: 4,
+      //   },
+      // ],
+    });
   };
 
   useEffect(() => {

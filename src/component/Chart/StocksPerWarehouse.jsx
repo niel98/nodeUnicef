@@ -1,90 +1,104 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import response from './zcoin';
 import Pie from 'react-chartjs-2';
 
 export const StockPerWarehouse = () => {
   const [chartData, setChartData] = useState({});
 
   const chart = () => {
-    let stock569 = [];
-    let stock541 = [];
-    let stock627 = [];
-    let stock420 = [];
-    let stock538 = [];
-    let stock527 = [];
+    const res = response;
+    let wareHouse = res.data.map((item) => item.warehouseNumberDescription);
+    let disWhouse = new Set(wareHouse);
+    let arrWhouse = Array.from(disWhouse);
 
-    const fetchData = () => {
-      const urls = [
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?warehouseNumber=569',
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?warehouseNumber=541',
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?warehouseNumber=627',
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?warehouseNumber=420',
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?warehouseNumber=538',
-        'https://api-unicef.herokuapp.com/api/v1/zcoinv/search/?warehouseNumber=527',
-      ];
+    let arr0 = [];
+    let arr1 = [];
+    let arr2 = [];
+    let arr3 = [];
+    let arr4 = [];
+    let arr5 = [];
+    let arr6 = [];
+    let arr7 = [];
 
-      const allRequests = urls.map((url) => axios.get(url).then((res) => res));
-      return Promise.all(allRequests);
-    };
+    res.data.forEach((item) => {
+      if (item.warehouseNumberDescription === arrWhouse[0]) {
+        arr0.push(item.stock);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.warehouseNumberDescription === arrWhouse[1]) {
+        arr1.push(item.stock);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.warehouseNumberDescription === arrWhouse[2]) {
+        arr2.push(item.stock);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.warehouseNumberDescription === arrWhouse[3]) {
+        arr3.push(item.stock);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.warehouseNumberDescription === arrWhouse[4]) {
+        arr4.push(item.stock);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.warehouseNumberDescription === arrWhouse[5]) {
+        arr5.push(item.stock);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.warehouseNumberDescription === arrWhouse[6]) {
+        arr6.push(item.stock);
+      }
+    });
+    res.data.forEach((item) => {
+      if (item.warehouseNumberDescription === arrWhouse[7]) {
+        arr7.push(item.stock);
+      }
+    });
 
-    fetchData().then((arrRes) => {
-      for (const item of arrRes[0].data.data) {
-        stock569.push(item.stock);
-      }
-      for (const item of arrRes[1].data.data) {
-        stock541.push(item.stock);
-      }
-      for (const item of arrRes[2].data.data) {
-        stock627.push(item.stock);
-      }
-      for (const item of arrRes[3].data.data) {
-        stock420.push(item.stock);
-      }
-      for (const item of arrRes[4].data.data) {
-        stock538.push(item.stock);
-      }
-      for (const item of arrRes[5].data.data) {
-        stock527.push(item.stock);
-      }
+    arr0 = arr0.reduce((a, b) => a + b, 0);
+    arr1 = arr1.reduce((a, b) => a + b, 0);
+    arr2 = arr2.reduce((a, b) => a + b, 0);
+    arr3 = arr3.reduce((a, b) => a + b, 0);
+    arr4 = arr4.reduce((a, b) => a + b, 0);
+    arr5 = arr5.reduce((a, b) => a + b, 0);
+    arr6 = arr6.reduce((a, b) => a + b, 0);
+    arr7 = arr7.reduce((a, b) => a + b, 0);
 
-      const sum569 = stock569.reduce((a, b) => a + b, 0);
-      const sum541 = stock541.reduce((a, b) => a + b, 0);
-      const sum627 = stock627.reduce((a, b) => a + b, 0);
-      const sum420 = stock420.reduce((a, b) => a + b, 0);
-      const sum538 = stock538.reduce((a, b) => a + b, 0);
-      const sum527 = stock527.reduce((a, b) => a + b, 0);
+    let finValArr = [arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7];
 
-      setChartData({
-        labels: [
-          'Jos NASCO',
-          'Maiduguri2-New',
-          'Bauchi WH Galadima',
-          'Bauchi W1',
-          'Maiduguri WH',
-          'Bollore WH Abuja',
-        ],
-        datasets: [
-          {
-            label: 'Total Number of Stocks per Program',
-            data: [sum541, sum569, sum627, sum420, sum538, sum527],
-            backgroundColor: [
-              'rgba(75, 192, 192, 0.6)',
-              'rgba(255, 0, 0, 0.6)',
-              'rgba(0, 255, 0, 0.6)',
-              'rgba(0, 0, 255, 0.6)',
-              'rgba(204,51,102,0.2)',
-              'rgba(255,255,0,0.2)',
-            ],
-            borderwidth: 4,
-          },
-        ],
-      });
+    setChartData({
+      labels: arrWhouse,
+      datasets: [
+        {
+          label: 'Total Number of Stocks per Program',
+          data: finValArr,
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 0, 0, 0.6)',
+            'rgba(0, 255, 0, 0.6)',
+            'rgba(0, 0, 255, 0.6)',
+            'rgba(255, 255, 0, 0.6)',
+            'rgba(255, 51, 204, 0.6)',
+            'rgba(153, 204, 255, 0.6)',
+            'rgba(102, 51, 0, 0.6)',
+          ],
+          borderwidth: 4,
+        },
+      ],
     });
   };
 
   useEffect(() => {
     chart();
   }, []);
+
   return (
     <div>
       <div>
