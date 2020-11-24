@@ -125,7 +125,7 @@ export const TotalProdsPerProg = () => {
             },
             title: {
               position: 'top',
-              text: 'Total Number of Products Per Program',
+              text: 'Total value Per Program',
               display: true,
             },
             plugins: {
